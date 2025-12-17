@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Watch – Tmovie Clone</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     ::-webkit-scrollbar { width: 0; height: 0; }
   </style>
@@ -33,6 +35,10 @@
     <!-- Right actions -->
     <div class="flex items-center space-x-3">
       <input type="text" id="searchInput" placeholder="Search movies, TV shows…" class="hidden md:block bg-gray-800/80 border border-gray-600 rounded px-3 py-1 text-sm focus:outline-none focus:ring focus:ring-red-500 placeholder-gray-400" />
+      <!-- Mobile search icon -->
+      <button id="mobileSearchBtn" class="md:hidden p-2 rounded-full hover:bg-gray-800 focus:outline-none" aria-label="Search">
+        <i class="fa-solid fa-search"></i>
+      </button>
       <select id="langSelect" class="hidden md:block bg-gray-800/80 border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring focus:ring-red-500 text-gray-300">
         <option value="en-US">EN</option>
         <option value="hi-IN">HI</option>
@@ -73,14 +79,20 @@
   <!-- Watch content -->
   <section class="px-6 pt-24 pb-8">
     <h1 id="watch-title" class="text-3xl md:text-4xl font-bold mb-4"></h1>
-    <!-- Server selection (dropdown) -->
-    <div class="mb-4">
+    <!-- Server selection (dropdown) with sandbox toggle -->
+    <div class="mb-4 flex items-center space-x-4">
       <select id="serverSelect" class="bg-gray-800 border border-gray-600 rounded px-3 py-1 text-sm focus:outline-none focus:ring focus:ring-red-500 text-gray-300">
         <!-- Options will be populated by JS -->
       </select>
+      <!-- Hidden checkbox controlling sandbox -->
+      <input type="checkbox" id="sandboxToggle" class="hidden" />
+      <!-- Label for sandbox toggle; the icon will be updated via JS -->
+      <label for="sandboxToggle" id="sandboxToggleLabel" class="text-xl cursor-pointer p-2 text-gray-400 hover:text-white" title="Toggle sandbox"></label>
     </div>
-    <div id="watch-player" class="w-full h-80 md:h-[450px] bg-gray-800 flex items-center justify-center mb-4">
-      <!-- Trailer or placeholder will be injected by JS -->
+    <!-- Video player container with 16:9 aspect ratio.  The iframe injected via JS will
+         be absolutely positioned to fill this container. -->
+    <div id="watch-player" class="relative w-full bg-gray-800 mb-4" style="padding-top: 56.25%;">
+      <!-- The iframe will be injected by JS -->
     </div>
     <button id="watch-download-btn" class="flex items-center border border-white px-4 py-2 rounded hover:bg-white hover:text-black transition-colors">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -97,16 +109,74 @@
   </section>
 
   <!-- Download pop-up -->
-  <div id="download-popup" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-50">
-    <div class="bg-gray-900 p-4 rounded-lg w-64">
-      <div class="flex justify-between items-center mb-2">
-        <h3 class="text-lg font-semibold">Select Quality</h3>
-        <button id="download-close" class="text-gray-400 hover:text-white">&times;</button>
+    <!-- Download server selection pop‑up -->
+    <div id="download-popup" class="fixed inset-0 bg-black/70 flex items-center justify-center hidden z-50">
+      <div class="bg-gray-900 p-4 rounded-lg w-72">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-lg font-semibold">Select Download Source</h3>
+          <button id="download-close" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <div id="download-list" class="space-y-2"></div>
       </div>
-      <div id="download-list"></div>
     </div>
-  </div>
+
+    <!-- Download iframe pop‑up for DL/Worker servers -->
+    <div id="download-iframe-popup" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center hidden z-50">
+      <div class="bg-gray-900 rounded-lg overflow-hidden" style="width:90%;max-width:640px;">
+        <div class="flex justify-between items-center p-2 border-b border-gray-700">
+          <h3 class="text-lg font-semibold">Downloading…</h3>
+          <button id="download-iframe-close" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <!-- 16:9 iframe container for download servers -->
+        <div class="relative" style="padding-top:56.25%;">
+          <div id="download-iframe-container" class="absolute inset-0"></div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Mobile bottom navigation bar -->
+  <nav id="bottom-nav" class="fixed bottom-0 inset-x-0 z-50 bg-black/80 backdrop-blur-md border-t border-white/10 md:hidden">
+    <div class="flex justify-around text-xs">
+      <a href="index.html" data-page="home" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="movies.html" data-page="movies" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🎬</span>
+        <span>Movies</span>
+      </a>
+      <a href="tv.html" data-page="tv" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">📺</span>
+        <span>TV</span>
+      </a>
+      <a href="anime.html" data-page="anime" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🐉</span>
+        <span>Anime</span>
+      </a>
+      <a href="platforms.html" data-page="platforms" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">💠</span>
+        <span>Platforms</span>
+      </a>
+      <a href="watchlist.html" data-page="watchlist" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">▶️</span>
+        <span>Watch</span>
+      </a>
+    </div>
+  </nav>
 
   <script src="app.js"></script>
+
+  <!-- Mobile Search Overlay -->
+  <div id="search-overlay" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden">
+    <div class="p-4">
+      <div class="flex items-center mb-2">
+        <input id="overlaySearchInput" type="text" placeholder="Search movies, TV shows…" class="flex-grow bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none" />
+        <button id="overlayCloseBtn" class="ml-3 text-gray-400 hover:text-white">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      <div id="overlaySearchResults" class="space-y-2 max-h-[50vh] overflow-y-auto"></div>
+    </div>
+  </div>
 </body>
 </html>

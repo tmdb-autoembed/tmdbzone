@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Person – Tmovie Clone</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     ::-webkit-scrollbar { width: 0; height: 0; }
   </style>
@@ -33,6 +35,10 @@
     <!-- Right actions -->
     <div class="flex items-center space-x-3">
       <input type="text" id="searchInput" placeholder="Search movies, TV shows…" class="hidden md:block bg-gray-800/80 border border-gray-600 rounded px-3 py-1 text-sm focus:outline-none focus:ring focus:ring-red-500 placeholder-gray-400" />
+      <!-- Mobile search button -->
+      <button id="mobileSearchBtn" class="md:hidden p-2 rounded-full hover:bg-gray-800 focus:outline-none" aria-label="Search">
+        <i class="fa-solid fa-search"></i>
+      </button>
       <select id="langSelect" class="hidden md:block bg-gray-800/80 border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring focus:ring-red-500 text-gray-300">
         <option value="en-US">EN</option>
         <option value="hi-IN">HI</option>
@@ -87,6 +93,49 @@
     <div id="person-known" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
   </section>
 
+  <!-- Mobile bottom navigation bar -->
+  <nav id="bottom-nav" class="fixed bottom-0 inset-x-0 z-50 bg-black/80 backdrop-blur-md border-t border-white/10 md:hidden">
+    <div class="flex justify-around text-xs">
+      <a href="index.html" data-page="home" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="movies.html" data-page="movies" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🎬</span>
+        <span>Movies</span>
+      </a>
+      <a href="tv.html" data-page="tv" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">📺</span>
+        <span>TV</span>
+      </a>
+      <a href="anime.html" data-page="anime" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🐉</span>
+        <span>Anime</span>
+      </a>
+      <a href="platforms.html" data-page="platforms" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">💠</span>
+        <span>Platforms</span>
+      </a>
+      <a href="watchlist.html" data-page="watchlist" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">▶️</span>
+        <span>Watch</span>
+      </a>
+    </div>
+  </nav>
+
   <script src="app.js"></script>
+
+  <!-- Mobile Search Overlay -->
+  <div id="search-overlay" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden">
+    <div class="p-4">
+      <div class="flex items-center mb-2">
+        <input id="overlaySearchInput" type="text" placeholder="Search movies, TV shows…" class="flex-grow bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none" />
+        <button id="overlayCloseBtn" class="ml-3 text-gray-400 hover:text-white">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      <div id="overlaySearchResults" class="space-y-2 max-h-[50vh] overflow-y-auto"></div>
+    </div>
+  </div>
 </body>
 </html>

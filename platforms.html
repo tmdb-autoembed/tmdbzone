@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Platforms – Tmovie Clone</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     ::-webkit-scrollbar { width: 0; height: 0; }
   </style>
@@ -47,6 +49,10 @@
     <!-- Actions on the right -->
     <div class="flex items-center space-x-3">
       <input type="text" id="searchInput" placeholder="Search movies, TV shows…" class="hidden md:block bg-gray-800/80 border border-gray-600 rounded px-3 py-1 text-sm focus:outline-none focus:ring focus:ring-red-500 placeholder-gray-400" />
+      <!-- Mobile search button -->
+      <button id="mobileSearchBtn" class="md:hidden p-2 rounded-full hover:bg-gray-800 focus:outline-none" aria-label="Search">
+        <i class="fa-solid fa-search"></i>
+      </button>
       <select id="langSelect" class="hidden md:block bg-gray-800/80 border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring focus:ring-red-500 text-gray-300">
         <option value="en-US">EN</option>
         <option value="hi-IN">HI</option>
@@ -85,86 +91,130 @@
   </div>
 
   <!-- Platform selection -->
-  <section class="px-6 pt-24 pb-8">
-    <h1 class="text-2xl md:text-3xl font-bold mb-2">Choose Your Platform</h1>
-    <p class="text-gray-400 mb-6">Select a streaming service to browse its content</p>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-      <!-- Define a set of platform cards with placeholders.  We avoid using official logos. -->
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Netflix</span>
+  
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Platforms</title>
+
+<style>
+body{margin:0;background:#020617;font-family:sans-serif}
+.dk-platforms{padding:25px}
+.dk-title{color:#fff;font-size:22px;margin-bottom:20px}
+
+.dk-provider-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+  gap:16px;
+}
+
+.dk-provider-card{
+  background:#0f172a;
+  border-radius:14px;
+  padding:16px 10px;
+  text-align:center;
+  cursor:pointer;
+  transition:.25s;
+  
+}
+.dk-provider-card:hover{
+  transform:translateY(-4px) scale(1.04);
+  box-shadow:0 10px 25px rgba(99,102,241,.4);
+}
+
+.dk-provider-card img{
+  width:60px;height:60px;
+  object-fit:contain;
+  margin-bottom:10px;
+ margin: 6px auto;
+ border-radius:12px;
+}
+.dk-provider-name{
+  color:#e5e7eb;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<section class="dk-platforms">
+  <h1 class="dk-title">Streaming Platforms</h1>
+  <div id="providerGrid" class="dk-provider-grid"></div>
+</section>
+
+<script>
+const API = "fed86956458f19fb45cdd382b6e6de83";
+const REGION = "IN";
+const grid = document.getElementById("providerGrid");
+
+fetch(`https://api.themoviedb.org/3/watch/providers/movie?api_key=${API}&watch_region=${REGION}`)
+.then(r=>r.json())
+.then(d=>{
+  const list = d.results
+    .filter(x=>x.logo_path)
+    .sort((a,b)=>(a.display_priority??99)-(b.display_priority??99));
+
+  grid.innerHTML = list.map(p=>`
+    <div class="dk-provider-card" onclick="openPlatform(${p.provider_id},'${p.provider_name}')">
+      <img src="https://image.tmdb.org/t/p/w200${p.logo_path}">
+      <div class="dk-provider-name">${p.provider_name}</div>
+    </div>
+  `).join("");
+});
+
+function openPlatform(id,name){
+  window.location.href = `platform.html?provider=${id}&name=${encodeURIComponent(name)}`;
+}
+</script>
+
+</body>
+</html>
+
+  <!-- Mobile bottom navigation bar -->
+  <nav id="bottom-nav" class="fixed bottom-0 inset-x-0 z-50 bg-black/80 backdrop-blur-md border-t border-white/10 md:hidden">
+    <div class="flex justify-around text-xs">
+      <a href="index.html" data-page="home" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🏠</span>
+        <span>Home</span>
       </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Disney+</span>
+      <a href="movies.html" data-page="movies" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🎬</span>
+        <span>Movies</span>
       </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Prime&nbsp;Video</span>
+      <a href="tv.html" data-page="tv" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">📺</span>
+        <span>TV</span>
       </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Max</span>
+      <a href="anime.html" data-page="anime" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🐉</span>
+        <span>Anime</span>
       </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Apple&nbsp;TV+</span>
+      <a href="platforms.html" data-page="platforms" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">💠</span>
+        <span>Platforms</span>
       </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Hulu</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Paramount+</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Peacock</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Starz</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Showtime</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>AMC+</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Discovery+</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Crunchyroll</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Pluto&nbsp;TV</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Vudu</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Roku&nbsp;Channel</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Mubi</span>
-      </a>
-      <a href="#" class="flex flex-col items-center justify-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors">
-        <div class="h-16 w-16 bg-gray-700 rounded mb-2"></div>
-        <span>Shudder</span>
+      <a href="watchlist.html" data-page="watchlist" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">▶️</span>
+        <span>Watch</span>
       </a>
     </div>
-  </section>
+  </nav>
 
   <script src="app.js"></script>
+
+  <!-- Mobile Search Overlay -->
+  <div id="search-overlay" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden">
+    <div class="p-4">
+      <div class="flex items-center mb-2">
+        <input id="overlaySearchInput" type="text" placeholder="Search movies, TV shows…" class="flex-grow bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none" />
+        <button id="overlayCloseBtn" class="ml-3 text-gray-400 hover:text-white">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      <div id="overlaySearchResults" class="space-y-2 max-h-[50vh] overflow-y-auto"></div>
+    </div>
+  </div>
 </body>
 </html>

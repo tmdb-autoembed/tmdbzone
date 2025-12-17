@@ -1,56 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TV Shows – Tmovie Clone</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+ <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     ::-webkit-scrollbar { width: 0; height: 0; }
-    /* Custom gradient button styles */
-    .blue {
-      background: linear-gradient(45deg, #000125, #0e00c7);
-      box-shadow: 0px 6px 15px -2px #2b58ff;
-    }
-    .black {
-      background: linear-gradient(45deg, red, #000);
-      box-shadow: 0px 6px 15px -2px red;
-    }
-    .crimson {
-      background: linear-gradient(45deg, crimson, #1c0032);
-      box-shadow: 0px 6px 15px -2px crimson;
-    }
-    .green {
-      background: linear-gradient(45deg, #00ff42, #000);
-      box-shadow: 0px 6px 15px -2px green;
-    }
-    .violet {
-      background: linear-gradient(45deg, #4100cd, #0e002d);
-      box-shadow: 0px 6px 15px -2px #662bff;
-    }
-    .cyan {
-      background: linear-gradient(45deg, cyan, #00251c);
-      box-shadow: 0px 6px 15px -2px cyan;
-    }
-    @keyframes bump {
-      0% { filter: saturate(1); background-size: 100%; }
-      100% { filter: saturate(2); background-size: 140%; }
-    }
   </style>
 </head>
-<body class="bg-black text-white overflow-x-hidden" data-page="tv">
+<body class="bg-black text-white overflow-x-hidden" data-page="platforms">
   <!-- Navigation bar -->
   <nav class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 py-4 bg-black/70 backdrop-blur-md border-b border-white/10">
+    <!-- Brand name and mobile menu toggle -->
     <div class="flex items-center">
       <a href="index.html" class="text-2xl font-bold tracking-wide select-none">Tmovie</a>
+      <!-- Mobile menu toggle button -->
       <button id="mobileMenuToggle" class="md:hidden ml-3 p-2 rounded-full hover:bg-gray-800 focus:outline-none" aria-label="Toggle menu">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
     </div>
+    <!-- Desktop navigation links -->
     <ul class="hidden md:flex space-x-2">
       <li>
         <a href="index.html" class="flex items-center space-x-1 px-3 py-1 rounded-full hover:bg-gray-700 text-sm">Home</a>
@@ -59,7 +27,7 @@
         <a href="movies.html" class="flex items-center space-x-1 px-3 py-1 rounded-full hover:bg-gray-700 text-sm">Movies</a>
       </li>
       <li>
-        <a href="tv.html" class="flex items-center space-x-1 px-3 py-1 rounded-full bg-red-600 text-white text-sm">TV&nbsp;Shows</a>
+        <a href="tv.html" class="flex items-center space-x-1 px-3 py-1 rounded-full hover:bg-gray-700 text-sm">TV&nbsp;Shows</a>
       </li>
       <li>
         <a href="anime.html" class="flex items-center space-x-1 px-3 py-1 rounded-full hover:bg-gray-700 text-sm">Anime</a>
@@ -68,9 +36,11 @@
         <a href="filter.html" class="flex items-center space-x-1 px-3 py-1 rounded-full hover:bg-gray-700 text-sm">Filter</a>
       </li>
       <li>
-        <a href="platforms.html" class="flex items-center space-x-1 px-3 py-1 rounded-full hover:bg-gray-700 text-sm">Platforms</a>
+        <!-- Highlight the current page -->
+        <a href="platforms.html" class="flex items-center space-x-1 px-3 py-1 rounded-full bg-red-600 text-white text-sm">Platforms</a>
       </li>
     </ul>
+    <!-- Actions on the right -->
     <div class="flex items-center space-x-3">
       <input type="text" id="searchInput" placeholder="Search movies, TV shows…" class="hidden md:block bg-gray-800/80 border border-gray-600 rounded px-3 py-1 text-sm focus:outline-none focus:ring focus:ring-red-500 placeholder-gray-400" />
       <!-- Mobile search button -->
@@ -113,60 +83,250 @@
       <span>Theme</span>
     </button>
   </div>
+  
 
-  <!-- Hero section for TV shows page -->
-  <section id="hero" class="relative w-full h-[60vh] flex items-center justify-start px-6 pt-20 md:pt-24" style="background-size:cover;background-position:center;">
-    <div class="absolute inset-0 bg-gradient-to-r from-black via-black/30 to-transparent"></div>
-    <div class="relative z-10 max-w-xl space-y-4">
-      <h1 class="hero-title text-4xl md:text-5xl font-extrabold leading-tight"></h1>
-      <p class="hero-info flex items-center space-x-4 text-sm text-gray-300"></p>
-      <div class="flex items-center space-x-3">
-        <!-- Play button -->
-        <button class="hero-watch-btn flex items-center blue text-white px-4 py-2 rounded transition-transform" style="animation: bump 6s infinite alternate;">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10 3.172l6.364 6.364a1 1 0 010 1.414L10 17.314l-6.364-6.364a1 1 0 010-1.414L10 3.172z" />
-          </svg>
-          <span>Play</span>
-        </button>
-        <!-- Info button -->
-        <button class="hero-info-btn flex items-center black text-white px-4 py-2 rounded transition-transform" style="animation: bump 6s infinite alternate;">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 6h.01" />
-          </svg>
-          <span>Info</span>
-        </button>
-        <!-- Add/Remove button -->
-        <button class="hero-add-btn flex items-center crimson text-white px-4 py-2 rounded transition-transform" style="animation: bump 6s infinite alternate;">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
-          <span>Add</span>
-        </button>
-      </div>
-    </div>
-  </section>
 
-  <!-- Popular TV Shows (horizontal) -->
-  <section class="px-6 py-8">
-    <div class="flex items-center justify-between mb-2">
-      <h2 class="text-2xl font-bold">Popular TV Shows</h2>
-      <!-- View all link navigates to filter page with popularity sorting -->
-      <a href="filter.html?type=tv&sort=popularity.desc" class="text-sm text-blue-400 hover:underline">View All</a>
-    </div>
-    <div id="tv-popular" class="flex space-x-4 overflow-x-auto pb-2"></div>
-  </section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Platform</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Top Rated TV Shows (horizontal) -->
-  <section class="px-6 py-8">
-    <div class="flex items-center justify-between mb-2">
-      <h2 class="text-2xl font-bold">Top Rated TV Shows</h2>
-      <!-- View all link navigates to filter page with rating sorting -->
-      <a href="filter.html?type=tv&sort=vote_average.desc" class="text-sm text-blue-400 hover:underline">View All</a>
-    </div>
-    <div id="tv-top-rated" class="flex space-x-4 overflow-x-auto pb-2"></div>
-  </section>
+<style>
+/* ========= BASE ========= */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI;
+  background:#020617;
+  color:#fff;
+}
 
-  <!-- Mobile bottom navigation bar -->
+/* ========= HEADER ========= */
+.dk-header{
+  padding:18px;
+  font-size:22px;
+  font-weight:700;
+  position:sticky;
+  top:0;
+  z-index:9;
+  background:rgba(2,6,23,.9);
+  backdrop-filter:blur(8px);
+}
+
+/* ========= TABS ========= */
+.dk-tabs{
+  display:flex;
+  gap:12px;
+  padding:14px 18px;
+}
+
+.dk-tab{
+  padding:8px 18px;
+  border-radius:30px;
+  background:#0f172a;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+
+.dk-tab::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:30px;
+  padding:1.5px;
+  background:linear-gradient(120deg,#6366f1,#22d3ee,#a855f7);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  opacity:.2;
+}
+
+.dk-tab.active{
+  background:#020617;
+}
+
+.dk-tab.active::before{
+  opacity:1;
+  animation:glow 3s linear infinite;
+}
+
+@keyframes glow{
+  from{filter:hue-rotate(0deg)}
+  to{filter:hue-rotate(360deg)}
+}
+
+/* ========= GRID ========= */
+.dk-grid{
+  padding:18px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:16px;
+}
+
+/* ========= CARD ========= */
+.dk-card{
+  position:relative;
+  border-radius:16px;
+  overflow:hidden;
+  background:#0f172a;
+  cursor:pointer;
+  transition:.35s;
+}
+
+.dk-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  padding:1.5px;
+  border-radius:16px;
+  background:linear-gradient(140deg,#6366f1,#22d3ee,#a855f7);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  opacity:.15;
+}
+
+.dk-card:hover{
+  transform:translateY(-6px) scale(1.04);
+  box-shadow:0 20px 40px rgba(99,102,241,.35);
+}
+
+.dk-card:hover::before{
+  opacity:1;
+  animation:glow 3s linear infinite;
+}
+
+.dk-card img{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:cover;
+}
+
+.dk-card-title{
+  padding:10px;
+  font-size:14px;
+  line-height:1.2;
+}
+
+/* ========= LOADER ========= */
+.dk-loader{
+  text-align:center;
+  padding:20px;
+  color:#94a3b8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="dk-header" id="pageTitle">Platform</div>
+
+<div class="dk-tabs">
+  <div class="dk-tab active" onclick="switchTab('movie',this)">Movies</div>
+  <div class="dk-tab" onclick="switchTab('tv',this)">TV Shows</div>
+</div>
+
+<div id="contentGrid" class="dk-grid"></div>
+<div id="loader" class="dk-loader">Loading...</div>
+
+<script>
+const API = "fed86956458f19fb45cdd382b6e6de83";
+const q = new URLSearchParams(location.search);
+
+const PROVIDER = q.get("provider") || 8; // fallback Netflix
+const NAME = q.get("name") || "Platform";
+
+let CURRENT_TYPE = "movie";
+let PAGE = 1;
+let LOADING = false;
+
+const grid = document.getElementById("contentGrid");
+const loader = document.getElementById("loader");
+
+document.getElementById("pageTitle").innerText = NAME;
+
+/* ---------- SWITCH TAB ---------- */
+function switchTab(type, el){
+  if (CURRENT_TYPE === type) return;
+
+  document.querySelectorAll(".dk-tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+
+  CURRENT_TYPE = type;
+  PAGE = 1;
+  grid.innerHTML = "";
+  loadMore();
+}
+
+/* ---------- LOAD DATA ---------- */
+function loadMore(){
+  if (LOADING) return;
+  LOADING = true;
+  loader.style.display = "block";
+
+  const url =
+    `https://api.themoviedb.org/3/discover/${CURRENT_TYPE}` +
+    `?api_key=${API}` +
+    `&with_watch_providers=${PROVIDER}` +
+    `&with_watch_monetization_types=flatrate` +
+    `&watch_region=IN` +
+    `&sort_by=popularity.desc` +
+    `&page=${PAGE}`;
+
+  fetch(url)
+    .then(r => r.json())
+    .then(d => {
+      if (!d.results || !d.results.length) {
+        loader.innerText = "No more results";
+        return;
+      }
+
+      d.results.forEach(x => {
+        if (!x.poster_path) return;
+
+        const card = document.createElement("div");
+        card.className = "dk-card";
+        card.innerHTML = `
+          <img src="https://image.tmdb.org/t/p/w342${x.poster_path}">
+          <div class="dk-card-title">${x.title || x.name}</div>
+        `;
+        card.onclick = () =>
+          location.href = `details.html?type=${CURRENT_TYPE}&id=${x.id}`;
+
+        grid.appendChild(card);
+      });
+
+      PAGE++;
+      LOADING = false;
+      loader.style.display = "none";
+    })
+    .catch(err => {
+      console.error(err);
+      loader.innerText = "Error loading data";
+      LOADING = false;
+    });
+}
+
+/* ---------- INFINITE SCROLL ---------- */
+window.addEventListener("scroll",()=>{
+  if (window.innerHeight + scrollY >= document.body.offsetHeight - 300){
+    loadMore();
+  }
+});
+
+/* ---------- INIT ---------- */
+loadMore();
+</script>
+</body>
+</html>
+
   <nav id="bottom-nav" class="fixed bottom-0 inset-x-0 z-50 bg-black/80 backdrop-blur-md border-t border-white/10 md:hidden">
     <div class="flex justify-around text-xs">
       <a href="index.html" data-page="home" class="flex flex-col items-center py-2 px-1">

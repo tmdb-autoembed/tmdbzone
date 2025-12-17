@@ -6,8 +6,39 @@
   <title>Details – Tmovie Clone</title>
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     ::-webkit-scrollbar { width: 0; height: 0; }
+    /* Custom gradient button styles reused across pages */
+    .blue {
+      background: linear-gradient(45deg, #000125, #0e00c7);
+      box-shadow: 0px 6px 15px -2px #2b58ff;
+    }
+    .black {
+      background: linear-gradient(45deg, red, #000);
+      box-shadow: 0px 6px 15px -2px red;
+    }
+    .crimson {
+      background: linear-gradient(45deg, crimson, #1c0032);
+      box-shadow: 0px 6px 15px -2px crimson;
+    }
+    .green {
+      background: linear-gradient(45deg, #00ff42, #000);
+      box-shadow: 0px 6px 15px -2px green;
+    }
+    .violet {
+      background: linear-gradient(45deg, #4100cd, #0e002d);
+      box-shadow: 0px 6px 15px -2px #662bff;
+    }
+    .cyan {
+      background: linear-gradient(45deg, cyan, #00251c);
+      box-shadow: 0px 6px 15px -2px cyan;
+    }
+    @keyframes bump {
+      0% { filter: saturate(1); background-size: 100%; }
+      100% { filter: saturate(2); background-size: 140%; }
+    }
   </style>
 </head>
 <body class="bg-black text-white overflow-x-hidden" data-page="details">
@@ -34,6 +65,10 @@
     <!-- Right actions -->
     <div class="flex items-center space-x-3">
       <input type="text" id="searchInput" placeholder="Search movies, TV shows…" class="hidden md:block bg-gray-800/80 border border-gray-600 rounded px-3 py-1 text-sm focus:outline-none focus:ring focus:ring-red-500 placeholder-gray-400" />
+      <!-- Mobile search button -->
+      <button id="mobileSearchBtn" class="md:hidden p-2 rounded-full hover:bg-gray-800 focus:outline-none" aria-label="Search">
+        <i class="fa-solid fa-search"></i>
+      </button>
       <select id="langSelect" class="hidden md:block bg-gray-800/80 border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring focus:ring-red-500 text-gray-300">
         <option value="en-US">EN</option>
         <option value="hi-IN">HI</option>
@@ -79,24 +114,21 @@
       <p id="details-info" class="text-sm text-gray-300 mt-2"></p>
       <div id="details-genres" class="flex flex-wrap mt-3"></div>
       <div class="flex items-center space-x-3 mt-4">
-        <button id="details-watch-btn" class="flex items-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10 3.172l6.364 6.364a1 1 0 010 1.414L10 17.314l-6.364-6.364a1 1 0 010-1.414L10 3.172z" />
-          </svg>
-          <span>Watch&nbsp;now</span>
+        <button id="details-watch-btn" class="flex items-center blue text-white px-4 py-2 rounded transition-transform" style="animation: bump 6s infinite alternate;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" stroke="currentColor" stroke-dasharray="40" stroke-dashoffset="40" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6l10 6l-10 6Z"><animate fill="freeze" attributeName="fill-opacity" begin="0.5s" dur="0.5s" values="0;1"/><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="40;0"/></path></svg>
+          <span>Play</span>
         </button>
-        <button id="details-download-btn" class="flex items-center border border-white px-4 py-2 rounded hover:bg-white hover:text-black transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M3 3a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V3zm7 9V5a1 1 0 10-2 0v7H5a1 1 0 000 2h4v2a1 1 0 102 0v-2h4a1 1 0 100-2h-4z" clip-rule="evenodd" />
-          </svg>
+        <button id="details-download-btn" class="flex items-center green text-white px-4 py-2 rounded transition-transform" style="animation: bump 6s infinite alternate;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path fill="currentColor" fill-opacity="0" stroke-dasharray="20" stroke-dashoffset="20" d="M12 4h2v6h2.5l-4.5 4.5M12 4h-2v6h-2.5l4.5 4.5"><animate attributeName="d" begin="0.5s" dur="1.5s" repeatCount="indefinite" values="M12 4h2v6h2.5l-4.5 4.5M12 4h-2v6h-2.5l4.5 4.5;M12 4h2v3h2.5l-4.5 4.5M12 4h-2v3h-2.5l4.5 4.5;M12 4h2v6h2.5l-4.5 4.5M12 4h-2v6h-2.5l4.5 4.5"/><animate fill="freeze" attributeName="fill-opacity" begin="0.7s" dur="0.15s" values="0;0.3"/><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="20;0"/></path><path stroke-dasharray="14" stroke-dashoffset="14" d="M6 19h12"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.2s" values="14;0"/></path></g></svg> 
           <span>Download</span>
         </button>
-        <button id="details-add-btn" class="flex items-center border border-white px-4 py-2 rounded hover:bg-white hover:text-black transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
-          <span>Add to Watchlist</span>
+        <button id="details-add-btn" class="flex items-center crimson text-white px-4 py-2 rounded transition-transform" style="animation: bump 6s infinite alternate;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m12 18l-7 3V3h8v2H7v12.95l5-2.15l5 2.15V11h2v10zM7 5h6zm10 4V7h-2V5h2V3h2v2h2v2h-2v2z"/></svg>
+          <span>save</span>
         </button>
+
+        <!-- Torrents button navigates to torrent page -->
+        
       </div>
     </div>
   </section>
@@ -111,6 +143,18 @@
   <section class="px-6 py-8">
     <h2 class="text-xl font-bold mb-4">Cast</h2>
     <div id="details-cast" class="flex space-x-4 overflow-x-auto pb-2"></div>
+  </section>
+
+  <!-- Trailers & More section -->
+  <section class="px-6 py-8">
+    <h2 class="text-xl font-bold mb-4">Trailers &amp; More</h2>
+    <div id="details-videos" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+  </section>
+
+  <!-- Watch Providers / Logos section -->
+  <section class="px-6 py-8">
+    <h2 class="text-xl font-bold mb-4">Available On</h2>
+    <div id="details-providers" class="flex items-center space-x-4 overflow-x-auto pb-2"></div>
   </section>
 
   <!-- Recommendations -->
@@ -130,6 +174,62 @@
     </div>
   </div>
 
+  <!-- Download iframe pop-up (for DL/Worker servers) -->
+  <div id="download-iframe-popup" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center hidden z-50">
+    <div class="bg-gray-900 rounded-lg overflow-hidden" style="width:90%;max-width:640px;">
+      <div class="flex justify-between items-center p-2 border-b border-gray-700">
+        <h3 class="text-lg font-semibold">Downloading…</h3>
+        <button id="download-iframe-close" class="text-gray-400 hover:text-white">&times;</button>
+      </div>
+      <div class="relative" style="padding-top:56.25%;">
+        <div id="download-iframe-container" class="absolute inset-0"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile bottom navigation bar -->
+  <nav id="bottom-nav" class="fixed bottom-0 inset-x-0 z-50 bg-black/80 backdrop-blur-md border-t border-white/10 md:hidden">
+    <div class="flex justify-around text-xs">
+      <a href="index.html" data-page="home" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🏠</span>
+        <span>Home</span>
+      </a>
+      <a href="movies.html" data-page="movies" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🎬</span>
+        <span>Movies</span>
+      </a>
+      <a href="tv.html" data-page="tv" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">📺</span>
+        <span>TV</span>
+      </a>
+      <a href="anime.html" data-page="anime" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">🐉</span>
+        <span>Anime</span>
+      </a>
+      <a href="platforms.html" data-page="platforms" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">💠</span>
+        <span>Platforms</span>
+      </a>
+      <a href="watchlist.html" data-page="watchlist" class="flex flex-col items-center py-2 px-1">
+        <span class="text-lg">▶️</span>
+        <span>Watch</span>
+      </a>
+    </div>
+  </nav>
+
   <script src="app.js"></script>
+
+  <!-- Mobile Search Overlay -->
+  <div id="search-overlay" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden">
+    <div class="p-4">
+      <div class="flex items-center mb-2">
+        <input id="overlaySearchInput" type="text" placeholder="Search movies, TV shows…" class="flex-grow bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none" />
+        <button id="overlayCloseBtn" class="ml-3 text-gray-400 hover:text-white">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      <div id="overlaySearchResults" class="space-y-2 max-h-[50vh] overflow-y-auto"></div>
+    </div>
+  </div>
 </body>
 </html>
