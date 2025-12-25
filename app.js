@@ -1,4 +1,4 @@
-const API_KEY = 'fed86956458f19fb45cdd382b6e6de83';
+const API_KEY = '7bffed716d50c95ed1c4790cfab4866a';
 const API_BASE = 'https://api.themoviedb.org/3';
 // Base paths for images.  Original gives the highest resolution and w500 a
 // reasonable size for posters.
@@ -1123,7 +1123,7 @@ async function initHomeDiscover() {
   });
   // Populate languages (ISO codes).  This list covers a few common languages.
   const languages = [
-    { code: 'hi', name: 'Language' },
+    { code: '', name: 'Language' },
     { code: 'en', name: 'English' },
     { code: 'hi', name: 'Hindi' },
     { code: 'ja', name: 'Japanese' },
